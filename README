@@ -1,0 +1,36 @@
+Dynamic DNS for WebFaction
+==========================
+
+Just a little Python script that updates DNS records on WebFaction.
+
+USAGE
+=====
+
+To use this all you need to do is 2 things:
+	
+	1. Create a config file
+
+		The config file is simple.
+		There is an example file, 'ddns.config'.
+		However in short, all comments start with a '#',
+		comments and blank lines are not counted, the
+		first line is your user account, and the following lines
+		are the domains you wish to change.
+
+		To avoid saving passwords in plain text,
+		they are not stored in the config file.
+		You shall be prompted to enter it at first run
+		then it is saved your systems keyring using Python's
+		'keyring' module.
+
+	2. Run the script
+
+		As simple as:
+			'python ddns.py'
+
+		If the config file is in the script's directory
+		and named 'ddns.config'.
+
+		Otherwise Just:
+			'python ddns.py [config_file]'
+
