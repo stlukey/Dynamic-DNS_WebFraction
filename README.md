@@ -7,9 +7,13 @@ USAGE
 =====
 =====
 
-To use this script, all you need to do is 2 things:
+To use this script, all you need to do is 3 things:
 
-###1. Create a config file
+###1. Clone the repo.
+
+    git clone git@github.com:o4dev/Dynamic-DNS_WebFraction.git
+
+###2. Create/Edit a config file.
 
 Below is the contents of the example file, `ddns.config`.
 **It is recommended that you just edit it to suit your needs.**
@@ -35,7 +39,7 @@ You shall be prompted to enter it at first run
 then it will be saved to your system's keyring
 using Python's `keyring` module.
 
-###2. Run the script
+###3. Run the script.
 
 If you just edited `ddns.config`, it is as simple as:
 
