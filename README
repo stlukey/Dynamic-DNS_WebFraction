@@ -7,30 +7,29 @@ USAGE
 =====
 
 To use this all you need to do is 2 things:
-	
-	1. Create a config file
+    
+    1. Create a config file
+        
+        In short,
+                    * all comments start with a '#',
+                    * comments and blank lines are not counted,
+                    * the first line is your user account,
+                    * and the following lines are the domains you wish to change.
 
-		The config file is simple.
-		There is an example file, 'ddns.config'.
-		However in short, all comments start with a '#',
-		comments and blank lines are not counted, the
-		first line is your user account, and the following lines
-		are the domains you wish to change.
+        There is an example file, 'ddns.config'.
+        You could just edit that if you wish.
 
-		To avoid saving passwords in plain text,
-		they are not stored in the config file.
-		You shall be prompted to enter it at first run
-		then it is saved your systems keyring using Python's
-		'keyring' module.
+        To avoid saving passwords in plain text,
+        they are not stored in the config file.
+        You shall be prompt to enter it at first run
+        then it will be saved to your system's keyring
+         using Python's 'keyring' module.
 
-	2. Run the script
+    2. Run the script
 
-		As simple as:
-			'python ddns.py'
+        If you just edited 'ddns.config', it is as simple as:
+            'python ddns.py'
 
-		If the config file is in the script's directory
-		and named 'ddns.config'.
-
-		Otherwise Just:
-			'python ddns.py [config_file]'
+        Otherwise just:
+            'python ddns.py [config_file]'
 
