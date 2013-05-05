@@ -138,7 +138,6 @@ def read(f):
 
 if __name__ == '__main__':
     if len(argv) < 2:
-        import os
         # Default config './ddns.config'
         main(os.path.join(os.path.dirname(NAMESPACE), 'ddns.config'))
     else:
