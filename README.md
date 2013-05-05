@@ -41,7 +41,7 @@ If you just edited `ddns.config`, it is as simple as:
 
     python ddns.py
 
-Otherwise just:
+Otherwise:
 
     python ddns.py [config_file]
 
