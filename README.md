@@ -49,3 +49,27 @@ Otherwise:
 
     python ddns.py [config_file]
 
+##Help!!!
+    Dynamic DNS for WEBFACTION!
+    Update WebFaction domains to point to the IP of the local machine.
+
+    USAGE: python ddns.py [config_file]
+    
+        config_file                Default is 'ddns.config'.
+    
+        -h, --help                 Print this message.
+    
+        --delete-password          Deletes the password from the keyring.
+    
+        -l [interval=5m]           Listen for IP change every [interval]
+    
+    config_file:
+        #          comments
+    
+        line 0     The first line that is not a comment must be the
+                    username for WebFaction.
+    
+        line 1+    The following lines must contain the domains to be updated.
+    
+
+
