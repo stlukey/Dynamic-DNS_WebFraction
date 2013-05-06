@@ -43,16 +43,20 @@ from urllib2 import urlopen
 from getpass import getpass
 import keyring
 
+from time import sleep
+
 __doc__ = """Dynamic DNS for WEBFACTION!
 Update WebFaction domains to point to the IP of the local machine.
 
 USAGE: python %s [config_file]
 
-    config_file        Default is 'ddns.config'.
+    config_file                Default is 'ddns.config'.
 
-    -h, --help         Print this message.
+    -h, --help                 Print this message.
 
-    --delete-password  Deletes the password from the keyring.
+    --delete-password          Deletes the password from the keyring.
+
+    -l [interval=5m]           Listen for IP change every [interval]
 
 config_file:
     #          comments
@@ -60,8 +64,7 @@ config_file:
     line 0     The first line that is not a comment must be the
                 username for WebFaction.
 
-    line 1+    The following lines must contain the domains to be update.
-
+    line 1+    The following lines must contain the domains to be updated.
 """ % __file__
 
 __author__ = "Luke Southam <luke@devthe.com>"
@@ -85,18 +88,55 @@ def main(config):
 
     ip = get_ip()
 
-    for domain in domains:
-        print '%s --> %s' % (domain, ip)
-        set_ip(domain, ip, user, password)
+    set_ip(domains, ip, user, password)
 
-def set_ip(domain, ip, user, password):
+def listen(config, interval):
+    with file(config) as f:
+        user, password, domains = get_config(f)
+    ip = get_ip()
+    print "Starting initial update..."
+    set_ip(domains, ip, user, password)
+    print "\nChecking for ip change every %d seconds..." % interval
+    try:
+        while True:
+            ip2 = get_ip()
+
+            if ip2 != ip:
+                print "\nIP HAS CHANGED! From %s to %s." % (ip, ip2)
+                ip = ip2
+                set_ip(domains, ip, user, password)
+
+            sleep(interval)
+    except KeyboardInterrupt:
+        print "\nGoodbye."
+
+def set_ip(domains, ip, user, password):
     """
     Override WebFaction's dns
     """
     try:
         server = ServerProxy(API)
         session_id = server.login(user, password)[0]
-        server.create_dns_override(session_id, domain, ip)
+
+        overrides = server.list_dns_overrides(session_id)
+
+        current = {domain:None for domain in domains}
+
+        for override in overrides:
+            if override['domain'] in domains:
+                current[override['domain']] = override['a_ip']
+
+        for domain in domains:
+            if (not current[domain]) or (current[domain] != ip):
+                print '%s => %s' % (domain, ip)
+
+                if domain in current:
+                    server.delete_dns_override(session_id, domain)
+
+                server.create_dns_override(session_id, domain, ip)
+            else:
+                print '%s == %s' % (domain, ip)
+
     except Exception as e:
         print "ERROR: clearing password."
         keyring.set_password(NAMESPACE, user, '')
@@ -153,6 +193,27 @@ if __name__ == '__main__':
             with file(argv[2] if len(argv) > 2 else os.path.join(os.path.dirname(NAMESPACE), 'ddns.config')) as f:
                 keyring.set_password(NAMESPACE, readline(f), '')
             stdout.write("DONE!\n")
+
+        elif '-l' in argv:
+            # python [config_file] -l [interval]
+            l = argv.index('-l')
+            config = os.path.join(os.path.dirname(NAMESPACE), 'ddns.config') if l == 1 else argv[1]
+            interval = argv[l + 1] if (l + 1) <= argv else '5m'
+
+            if interval.endswith('h'):
+                interval = int(interval[:-1]) * 60 * 60
+
+            elif interval.endswith('m'):
+                interval = int(interval[:-1]) * 60
+
+            elif interval.endswith('s'):
+                interval = int(interval[:-1])
+
+            else:
+                interval = int(interval)
+
+            listen(config, interval)
+
 
         else:
             # python ddns.py [config_file]
