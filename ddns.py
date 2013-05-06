@@ -155,5 +155,5 @@ if __name__ == '__main__':
             stdout.write("DONE!\n")
 
         else:
-            # python ddns.py -h,--help
+            # python ddns.py [config_file]
             main(argv[1])
