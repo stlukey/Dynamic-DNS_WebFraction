@@ -198,7 +198,7 @@ if __name__ == '__main__':
             # python [config_file] -l [interval]
             l = argv.index('-l')
             config = os.path.join(os.path.dirname(NAMESPACE), 'ddns.config') if l == 1 else argv[1]
-            interval = argv[l + 1] if (l + 1) <= argv else '5m'
+            interval = argv[l + 1] if (l + 1) <= len(argv) else '5m'
 
             if interval.endswith('h'):
                 interval = int(interval[:-1]) * 60 * 60
