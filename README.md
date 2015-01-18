@@ -11,7 +11,7 @@ To use this script, all you need to do is 3 things:
 
 ###1. Clone the repo.
 
-    git clone git@github.com:o4dev/Dynamic-DNS_WebFraction.git
+    git clone https://github.com/o4dev/Dynamic-DNS_WebFraction.git
 
 ###2. Create/Edit a config file.
 
